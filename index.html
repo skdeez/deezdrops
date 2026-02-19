@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Season Deez — Deez Drops</title>
+<meta name="description" content="Season Deez protects great ingredients from farm to street. A living provenance record of every spice collaboration, source relationship, and derivative brand we have built.">
+<meta property="og:title" content="Season Deez — Deez Drops">
+<meta property="og:description" content="Every drop has a source. Every source has a name. The full lineage, made visible.">
+<meta property="og:type" content="website">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:        #0f0b06;
+  --bark:       #2a1c0f;
+  --rust:       #c45e2a;
+  --gold:       #c9983a;
+  --gold-light: #e8c97a;
+  --cream:      #f5f0e8;
+  --parchment:  #ede6d6;
+  --muted:      #7a6e60;
+  --border:     #ddd5c0;
+  --card:       #faf6ee;
+  --source-col:     #2d6a4f;
+  --drop-col:       #c45e2a;
+  --derivative-col: #6b4f8c;
+  --brand-col:      #b8960c;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink); line-height: 1.65; overflow-x: hidden; }
+
+/* NAV */
+nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.2rem 2.5rem; transition: background 0.4s, box-shadow 0.4s; }
+nav.scrolled { background: var(--bark); box-shadow: 0 2px 20px rgba(0,0,0,0.4); }
+.nav-mark { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; color: var(--cream); text-decoration: none; letter-spacing: 0.04em; }
+.nav-mark span { color: var(--gold); }
+.nav-links { display: flex; gap: 2rem; }
+.nav-links a { color: var(--cream); text-decoration: none; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.75; transition: opacity 0.2s; }
+.nav-links a:hover { opacity: 1; }
+
+/* HERO */
+#hero { min-height: 100vh; background: var(--bark); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 7rem 2rem 5rem; position: relative; overflow: hidden; }
+#hero::before { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse at 15% 65%, rgba(196,94,42,0.18) 0%, transparent 55%), radial-gradient(ellipse at 82% 20%, rgba(201,152,58,0.12) 0%, transparent 45%); }
+.hero-eyebrow { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.6rem; opacity: 0.75; position: relative; z-index: 1; }
+.hero-mark { font-family: 'Playfair Display', serif; font-size: clamp(4rem, 11vw, 9rem); font-weight: 700; line-height: 0.92; color: var(--cream); position: relative; z-index: 1; margin-bottom: 0.25em; }
+.hero-mark span { color: var(--rust); }
+.hero-sub { font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(1rem, 2vw, 1.35rem); color: var(--gold-light); opacity: 0.8; max-width: 500px; line-height: 1.6; position: relative; z-index: 1; margin-bottom: 3.5rem; }
+.hero-stats { display: flex; gap: 3rem; flex-wrap: wrap; justify-content: center; position: relative; z-index: 1; border-top: 1px solid rgba(255,255,255,0.07); padding-top: 2.5rem; }
+.stat { text-align: center; }
+.stat-n { font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 700; color: var(--gold); display: block; line-height: 1; }
+.stat-l { font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-top: 0.3rem; display: block; }
+.hero-scroll { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); animation: breathe 3s ease-in-out infinite; }
+@keyframes breathe { 0%,100%{opacity:0.25} 50%{opacity:0.85} }
+
+/* SECTIONS */
+.wrap { padding: 6rem 0; }
+.inner { max-width: 1080px; margin: 0 auto; padding: 0 2rem; }
+.eyebrow { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.5rem; }
+.section-title { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 4vw, 2.7rem); font-weight: 700; color: var(--bark); margin-bottom: 0.5rem; line-height: 1.1; }
+.section-intro { font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(0.95rem, 1.5vw, 1.1rem); color: var(--muted); max-width: 620px; line-height: 1.75; margin-bottom: 4rem; }
+
+/* LINEAGE TREE */
+.tree { display: flex; flex-direction: column; }
+.root-node { display: flex; flex-direction: column; border-left: 2px solid var(--border); margin-left: 1rem; position: relative; }
+.root-node::before { content: ''; position: absolute; left: -7px; top: 2.6rem; width: 12px; height: 12px; border-radius: 50%; background: var(--gold); border: 2px solid var(--cream); z-index: 2; }
+.spine-gap { height: 2.5rem; border-left: 2px solid var(--border); margin-left: 1rem; }
+
+/* NODE CARD */
+.node { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.6rem 1.8rem; margin-left: 2rem; margin-top: 1.5rem; position: relative; transition: transform 0.25s, box-shadow 0.25s; }
+.node:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.09); }
+.node::before { content: ''; position: absolute; left: -2rem; top: 2.5rem; width: 2rem; height: 1px; background: var(--border); }
+.t-source     { border-left: 3px solid var(--source-col); }
+.t-drop       { border-left: 3px solid var(--drop-col); }
+.t-brand      { border-left: 3px solid var(--brand-col); }
+.t-derivative { border-left: 3px solid var(--derivative-col); }
+.children { margin-left: 2.5rem; border-left: 1px dashed var(--border); padding-bottom: 1.5rem; }
+.children .node { margin-top: 1.2rem; }
+.grandchildren { margin-left: 2rem; border-left: 1px dotted var(--border); padding-bottom: 1rem; }
+.grandchildren .node { margin-top: 1rem; }
+
+/* NODE INTERNALS */
+.node-meta { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.85rem; }
+.badge { font-size: 0.58rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.2em 0.7em; border-radius: 99px; }
+.b-source     { background: rgba(45,106,79,0.1);   color: var(--source-col); }
+.b-drop       { background: rgba(196,94,42,0.1);   color: var(--drop-col); }
+.b-brand      { background: rgba(184,150,12,0.12); color: var(--brand-col); }
+.b-derivative { background: rgba(107,79,140,0.1);  color: var(--derivative-col); }
+.b-active       { background: rgba(45,106,79,0.08);  color: var(--source-col); }
+.b-experimental { background: rgba(107,79,140,0.08); color: var(--derivative-col); }
+.b-limited      { background: rgba(196,94,42,0.08);  color: var(--drop-col); }
+.b-retired      { background: rgba(122,110,96,0.08); color: var(--muted); }
+.node-num { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 0.15rem; }
+.node-name { font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 700; color: var(--bark); line-height: 1.2; margin-bottom: 0.35rem; }
+.node-collab { font-size: 0.75rem; font-weight: 500; color: var(--rust); margin-bottom: 0.85rem; display: flex; align-items: center; gap: 0.35rem; }
+.node-collab::before { content: '↗'; }
+.node-desc { font-size: 0.88rem; color: #3d2e1e; line-height: 1.65; margin-bottom: 0.9rem; max-width: 560px; }
+.node-lesson { font-family: 'Playfair Display', serif; font-style: italic; font-size: 0.8rem; color: var(--muted); border-left: 2px solid var(--gold); padding-left: 0.8rem; line-height: 1.5; margin-bottom: 0.85rem; }
+.node-royalty { font-size: 0.72rem; color: var(--muted); background: var(--parchment); border: 1px dashed var(--border); border-radius: 6px; padding: 0.5rem 0.8rem; line-height: 1.55; }
+.node-royalty strong { color: var(--bark); font-weight: 500; }
+.provenance { display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 0.8rem; }
+.prov-chip { font-size: 0.6rem; letter-spacing: 0.07em; font-weight: 500; padding: 0.18em 0.6em; border-radius: 99px; background: var(--parchment); color: var(--muted); border: 1px solid var(--border); }
+.prov-arrow { color: var(--border); font-size: 0.65rem; }
+
+/* ABOUT */
+#about { background: var(--parchment); }
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+.about-body p { font-size: 0.96rem; line-height: 1.85; color: #3d2e1e; margin-bottom: 1.4rem; }
+.about-body p:last-child { margin-bottom: 0; }
+.partner-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.8rem; }
+.partner-card h3 { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--bark); margin-bottom: 1.2rem; }
+.partner-item { border-bottom: 1px solid var(--border); padding-bottom: 0.9rem; margin-bottom: 0.9rem; }
+.partner-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.partner-name { font-weight: 500; font-size: 0.88rem; color: var(--bark); margin-bottom: 0.15rem; }
+.partner-role { font-size: 0.72rem; color: var(--muted); }
+
+/* COLLAB */
+#collab { background: var(--ink); }
+#collab .section-title { color: var(--gold); }
+#collab .section-intro { color: rgba(245,240,232,0.5); }
+#collab .eyebrow { color: rgba(201,152,58,0.55); }
+.collab-form { background: #1a1208; border: 1px solid #2a1c0f; border-radius: 12px; padding: 2.5rem; max-width: 640px; }
+.collab-form label { display: block; font-size: 0.7rem; font-weight: 500; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.35rem; margin-top: 1.1rem; }
+.collab-form label:first-of-type { margin-top: 0; }
+.collab-form input, .collab-form textarea, .collab-form select { width: 100%; padding: 0.65rem 0.9rem; background: #110d06; border: 1px solid #2a1c0f; border-radius: 7px; color: var(--cream); font-family: 'DM Sans', sans-serif; font-size: 0.88rem; outline: none; transition: border-color 0.2s; }
+.collab-form input:focus, .collab-form textarea:focus, .collab-form select:focus { border-color: var(--rust); }
+.collab-form textarea { resize: vertical; min-height: 90px; }
+.collab-form select option { background: #1a1208; }
+
+/* FOOTER */
+footer { background: #080503; padding: 5rem 2rem 3rem; text-align: center; }
+.foot-mark { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--cream); margin-bottom: 0.3rem; }
+.foot-mark span { color: var(--rust); }
+.foot-sub { font-size: 0.72rem; color: var(--muted); margin-bottom: 2.5rem; letter-spacing: 0.08em; }
+.nl-row { display: flex; gap: 0.6rem; max-width: 380px; margin: 0 auto 0.5rem; flex-wrap: wrap; justify-content: center; }
+.nl-row input[type="email"] { flex: 1; min-width: 190px; padding: 0.65rem 0.9rem; background: #1a1208; border: 1px solid #2a1c0f; border-radius: 6px; color: var(--cream); font-family: 'DM Sans', sans-serif; font-size: 0.85rem; outline: none; transition: border-color 0.2s; }
+.nl-row input:focus { border-color: var(--rust); }
+.foot-copy { font-size: 0.65rem; color: #2a1c0f; margin-top: 2.5rem; }
+
+/* BUTTONS */
+.btn { display: inline-block; padding: 0.68rem 1.6rem; background: var(--rust); color: var(--cream); border: none; border-radius: 6px; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 500; letter-spacing: 0.04em; cursor: pointer; transition: background 0.2s, transform 0.15s; }
+.btn:hover { background: #a34820; transform: translateY(-1px); }
+.btn:active { transform: translateY(0); }
+.btn-sm { padding: 0.35rem 0.85rem; font-size: 0.73rem; }
+.btn-ghost { background: transparent; border: 1px solid rgba(255,255,255,0.18); color: var(--cream); }
+.btn-ghost:hover { background: rgba(255,255,255,0.07); transform: none; }
+.fmsg { font-size: 0.78rem; font-style: italic; color: #4a7c59; min-height: 1.2em; margin-top: 0.7rem; }
+.fmsg.err { color: #c0392b; }
+
+/* ADMIN */
+#admin-overlay { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(8,5,3,0.98); overflow-y: auto; padding: 3rem 2rem; }
+#admin-overlay.open { display: block; }
+.admin-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid #2a1c0f; }
+.admin-top h2 { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 1.4rem; }
+.admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem; }
+.admin-block { background: #1a1208; border: 1px solid #2a1c0f; border-radius: 10px; padding: 1.5rem; }
+.admin-block h3 { font-family: 'Playfair Display', serif; color: var(--cream); font-size: 1rem; margin-bottom: 1.2rem; }
+.admin-block label { display: block; font-size: 0.68rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.3rem; margin-top: 0.85rem; }
+.admin-block input, .admin-block textarea, .admin-block select { width: 100%; padding: 0.58rem 0.8rem; background: #110d06; border: 1px solid #2a1c0f; border-radius: 6px; color: var(--cream); font-family: 'DM Sans', sans-serif; font-size: 0.83rem; outline: none; transition: border-color 0.2s; }
+.admin-block input:focus, .admin-block textarea:focus { border-color: var(--rust); }
+.admin-block textarea { resize: vertical; min-height: 70px; }
+.admin-block select option { background: #1a1208; }
+.cb-row { display: flex; align-items: center; gap: 0.5rem; margin: 0.8rem 0; }
+.cb-row input[type=checkbox] { width: auto; }
+.cb-row label { margin: 0; text-transform: none; letter-spacing: 0; font-size: 0.83rem; color: var(--cream); }
+.pending-block { background: #1a1208; border: 1px solid #2a1c0f; border-radius: 10px; padding: 1.5rem; margin-bottom: 2rem; }
+.pending-block h3 { font-family: 'Playfair Display', serif; color: var(--cream); font-size: 1rem; margin-bottom: 1rem; }
+.inq-item { border: 1px solid #2a1c0f; border-radius: 7px; padding: 0.9rem; margin-bottom: 0.7rem; background: #110d06; }
+.inq-item p { font-size: 0.78rem; color: rgba(245,240,232,0.65); margin-bottom: 0.2rem; line-height: 1.5; }
+.inq-item strong { color: var(--cream); }
+.inq-actions { display: flex; gap: 0.5rem; margin-top: 0.6rem; }
+.email-dump { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: rgba(245,240,232,0.6); white-space: pre-wrap; user-select: all; background: #110d06; border: 1px solid #2a1c0f; border-radius: 5px; padding: 0.8rem; min-height: 50px; max-height: 180px; overflow-y: auto; }
+
+/* PASSWORD PROMPT */
+#pw-prompt { display: none; position: fixed; inset: 0; z-index: 300; background: rgba(8,5,3,0.98); align-items: center; justify-content: center; }
+#pw-prompt.open { display: flex; }
+.pw-box { background: #1a1208; border: 1px solid #2a1c0f; border-radius: 12px; padding: 2.5rem; max-width: 340px; width: 90%; text-align: center; }
+.pw-box h2 { font-family: 'Playfair Display', serif; color: var(--gold); margin-bottom: 0.4rem; }
+.pw-box p { font-size: 0.78rem; color: var(--muted); margin-bottom: 1.4rem; }
+.pw-box input { width: 100%; padding: 0.65rem 1rem; margin-bottom: 0.8rem; background: #110d06; border: 1px solid #2a1c0f; border-radius: 6px; color: var(--cream); font-family: 'DM Sans', sans-serif; font-size: 0.88rem; outline: none; }
+.pw-err { color: #c0392b; font-size: 0.75rem; min-height: 1.1em; margin-top: 0.4rem; }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  nav { padding: 1rem 1.2rem; }
+  .nav-links { gap: 1.2rem; }
+  .nav-links a { font-size: 0.68rem; }
+  .hero-stats { gap: 1.8rem; }
+  .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+  .admin-grid { grid-template-columns: 1fr; }
+  .children { margin-left: 1rem; }
+  .grandchildren { margin-left: 0.8rem; }
+  .node { margin-left: 1rem; padding: 1.2rem; }
+}
+@media (max-width: 480px) {
+  .nl-row { flex-direction: column; }
+  .nl-row input, .nl-row .btn { width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<!-- PASSWORD PROMPT -->
+<div id="pw-prompt">
+  <div class="pw-box">
+    <h2>Owner Access</h2>
+    <p>Enter your password to continue.</p>
+    <input type="password" id="pw-input" placeholder="Password" autocomplete="off">
+    <button class="btn" style="width:100%;" onclick="checkPw()">Enter</button>
+    <div class="pw-err" id="pw-err"></div>
+    <button onclick="closeAdmin()" style="background:none;border:none;color:var(--muted);font-size:0.72rem;margin-top:1rem;cursor:pointer;text-decoration:underline;">Cancel</button>
+  </div>
+</div>
+
+<!-- ADMIN DASHBOARD -->
+<div id="admin-overlay">
+  <div class="admin-top">
+    <h2>Owner Dashboard</h2>
+    <button class="btn btn-ghost btn-sm" onclick="closeAdmin()">Close ✕</button>
+  </div>
+  <div class="pending-block">
+    <h3>Collaboration Inquiries</h3>
+    <div id="inq-list"><p style="color:var(--muted);font-size:0.82rem;font-style:italic;">No inquiries yet.</p></div>
+  </div>
+  <div class="admin-grid">
+    <div class="admin-block">
+      <h3>+ Add to Lineage</h3>
+      <label>Name *</label>
+      <input type="text" id="a-name" placeholder="e.g. Smoked Mango Dust">
+      <label>Node Type</label>
+      <select id="a-type">
+        <option value="drop">Collaborator Drop</option>
+        <option value="source">Source Relationship</option>
+        <option value="brand">Downstream Brand</option>
+        <option value="derivative">Derivative / Format</option>
+      </select>
+      <label>Parent Node ID (blank if root)</label>
+      <input type="text" id="a-parent" placeholder="e.g. 001 or corjul">
+      <label>Drop Number (optional)</label>
+      <input type="text" id="a-num" placeholder="e.g. 004">
+      <label>Collaborator / Partner</label>
+      <input type="text" id="a-collab" placeholder="Name and context">
+      <label>Status</label>
+      <select id="a-status">
+        <option value="Active">Active</option>
+        <option value="Experimental">Experimental</option>
+        <option value="Limited">Limited</option>
+        <option value="Retired">Retired</option>
+      </select>
+      <label>Description *</label>
+      <textarea id="a-desc" placeholder="What is this and what does it do?"></textarea>
+      <label>Lesson</label>
+      <input type="text" id="a-lesson">
+      <label>Partnership / Royalty Note</label>
+      <input type="text" id="a-royalty">
+      <div class="cb-row"><input type="checkbox" id="a-corjul"><label for="a-corjul">Corjul brand expression</label></div>
+      <button class="btn" style="margin-top:1rem;" onclick="adminAddNode()">Add to Lineage</button>
+      <div class="fmsg" id="a-msg"></div>
+    </div>
+    <div class="admin-block">
+      <h3>Newsletter Signups</h3>
+      <p style="font-size:0.75rem;color:var(--muted);margin-bottom:0.8rem;line-height:1.5;">Select all text below to copy.</p>
+      <div class="email-dump" id="email-dump">No emails yet.</div>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#hero" class="nav-mark">Season <span>Deez</span></a>
+  <div class="nav-links">
+    <a href="#drops">Drops</a>
+    <a href="#about">About</a>
+    <a href="#collab">Collaborate</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-eyebrow">Stonekeep Holdings — Season Deez</div>
+  <h1 class="hero-mark">Season<br><span>Deez</span></h1>
+  <p class="hero-sub">Protecting great ingredients from farm to street and capturing mouths along the way.</p>
+  <div class="hero-stats" id="hero-stats"></div>
+  <div class="hero-scroll">↓ Read the lineage ↓</div>
+</section>
+
+<!-- DROPS -->
+<section class="wrap" id="drops">
+  <div class="inner">
+    <div class="eyebrow">The Provenance Record</div>
+    <h2 class="section-title">Deez Drops</h2>
+    <p class="section-intro">Every drop has a source. Every source has a name. Every name carries a relationship — creative, financial, and ongoing. This is the full lineage, made visible, because transparency is the product.</p>
+    <div class="tree" id="tree"></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="wrap" id="about">
+  <div class="inner">
+    <div class="eyebrow">The Brand</div>
+    <h2 class="section-title">What Season Deez Is</h2>
+    <div class="about-grid">
+      <div class="about-body">
+        <p>Season Deez exists because great ingredients keep getting lost between the farm and the plate. A sourcing relationship built with care, a compound that took years to coax into usable form, a flavor profile that has no name yet — these things deserve to travel further and reach more mouths than they usually do. We protect those ingredients by working with them directly, naming the people who grew and crafted them, and giving them a context where they can be fully themselves.</p>
+        <p>Deez Drops is not a catalog. It is a provenance record — a living document of every collaboration, source relationship, and derivative that has come through this kitchen. Some drops come from chefs who called with an idea. Some come from producers whose harvest needed a story. Every entry in the lineage is named. Every named relationship carries accountability — creative, financial, and ongoing.</p>
+        <p>What you can expect from Season Deez over time: more ingredients, more collaborators, more experiments, and a standing invitation to build something real together. Not understanding an ingredient fully is not a reason to leave it on the shelf. It is the reason to call us.</p>
+      </div>
+      <div>
+        <div class="partner-card">
+          <h3>Active Partner Relationships</h3>
+          <div id="partner-list"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COLLAB -->
+<section class="wrap" id="collab">
+  <div class="inner">
+    <div class="eyebrow">Work With Us</div>
+    <h2 class="section-title">Let's Build Something.</h2>
+    <p class="section-intro">Chefs, producers, growers, brands, bartenders — if you have an ingredient, a vision, or a question, this is the door. We read everything.</p>
+    <div class="collab-form">
+      <label>Your Name *</label>
+      <input type="text" id="c-name" placeholder="Full name or brand name">
+      <label>Email *</label>
+      <input type="email" id="c-email" placeholder="your@email.com">
+      <label>Who are you? *</label>
+      <select id="c-type">
+        <option value="" disabled selected>Select the closest match</option>
+        <option>Chef / Cook</option>
+        <option>Producer / Grower</option>
+        <option>Brand / Retailer</option>
+        <option>Bartender / Beverage Professional</option>
+        <option>Restaurant / Food Service</option>
+        <option>Media / Press</option>
+        <option>Other</option>
+      </select>
+      <label>What are you working with or thinking about? *</label>
+      <textarea id="c-idea" placeholder="An ingredient, a concept, a product, a question — whatever stage it's at."></textarea>
+      <label>How did you find us? (optional)</label>
+      <input type="text" id="c-source" placeholder="Word of mouth, Instagram, a friend...">
+      <div style="display:none;" aria-hidden="true"><input type="text" id="c-hp" tabindex="-1" autocomplete="off"></div>
+      <button class="btn" style="margin-top:1.4rem;" onclick="submitCollab()">Send It</button>
+      <div class="fmsg" id="c-msg"></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-mark">Season <span>Deez</span></div>
+  <div class="foot-sub">Farm to street. Mouth first. — Stonekeep Holdings</div>
+  <div class="nl-row">
+    <input type="email" id="nl-email" placeholder="your@email.com" aria-label="Email">
+    <button class="btn" onclick="submitNewsletter()">Stay Close</button>
+  </div>
+  <div class="fmsg" id="nl-msg" style="text-align:center;"></div>
+  <div class="foot-copy">© Season Deez — Stonekeep Holdings. All rights reserved.</div>
+</footer>
+
+<script>
+// ============================================================
+// CONFIGURATION — change password before publishing
+// ============================================================
+const ADMIN_PASSWORD = 'changeme2024'; // ← CHANGE THIS
+
+// ============================================================
+// LINEAGE DATA
+// To add a new node: copy any object below, update the fields,
+// set parentId to the id of the parent node. Nothing else changes.
+// ============================================================
+const lineageData = [
+  {
+    id: '001', number: '001', type: 'drop',
+    name: 'Sichuan Buzz Blend',
+    collaborator: 'Cockti Juicy Fried Chicken',
+    status: 'Active',
+    desc: 'The founding collaborator blend. A Sichuan-forward spice experience built to bring the numbing tingle of hydroxy-alpha-sanshool into a culinary context anyone could cook with and feel. The creative act that started everything Season Deez has become.',
+    lesson: 'The best collaborations happen when two people are curious about the same ingredient at the same time.',
+    royalty: 'Founding named collaborator. Royalty tracked per unit on all downstream commercial expressions bearing this creative relationship.',
+    parentId: null
+  },
+  {
+    id: 'corjul', number: null, type: 'brand',
+    name: 'Corjul',
+    collaborator: null,
+    status: 'Active',
+    desc: "Season Deez's first proprietary downstream brand — built exclusively on derivatives of Drop 001. Corjul is the commercial identity that carries what the Sichuan Buzz collaboration made possible into the world. Every Corjul product traces directly to 001 and names that lineage openly.",
+    lesson: 'A collaboration that teaches you something permanent earns its own name.',
+    royalty: 'All Corjul products trace to Drop 001. The Cockti Juicy Fried Chicken creative relationship is honored in the lineage record. Royalty accountability maintained upstream per SKU.',
+    parentId: '001'
+  },
+  {
+    id: 'corjul-bowties', number: null, type: 'derivative',
+    name: 'Bowties',
+    collaborator: null, status: 'Experimental',
+    desc: 'Honey spice drink stirrers designed to dissolve flavor and sweetness directly into a beverage as they are stirred. The delivery format is the ritual — the stir is the act of seasoning. A tactile product in a nearly empty market position.',
+    lesson: 'The delivery format is part of the experience.',
+    royalty: null, parentId: 'corjul'
+  },
+  {
+    id: 'corjul-suckers', number: null, type: 'derivative',
+    name: 'Suckers',
+    collaborator: null, status: 'Experimental',
+    desc: 'A slow-dissolve lollipop format carrying the Corjul spice profile. Confection as delivery mechanism — the experience builds over time rather than arriving all at once.',
+    lesson: '', royalty: null, parentId: 'corjul'
+  },
+  {
+    id: 'corjul-fudge', number: null, type: 'derivative',
+    name: 'Spice Fudge',
+    collaborator: null, status: 'Experimental',
+    desc: 'A confection built around the spice compound rather than sugar. Dense, slow, heat that lingers after the sweetness has gone.',
+    lesson: '', royalty: null, parentId: 'corjul'
+  },
+  {
+    id: 'corjul-dust', number: null, type: 'derivative',
+    name: 'Snack Dust',
+    collaborator: null, status: 'Active',
+    desc: 'A fine seasoning engineered for direct application — fingers, popcorn, rim of a bag, edge of a plate. The Corjul format that goes anywhere a snack goes.',
+    lesson: '', royalty: null, parentId: 'corjul'
+  },
+  {
+    id: 'corjul-rimmer', number: null, type: 'derivative',
+    name: 'Bar Rimmer',
+    collaborator: null, status: 'Active',
+    desc: "A cocktail glass rimmer blend. The seasoning lives on the edge — every time the drink touches the rim, the experience resets. Corjul's entry into beverage service.",
+    lesson: '', royalty: null, parentId: 'corjul'
+  },
+  {
+    id: '002', number: '002', type: 'drop',
+    name: 'Hulked Jalapeño',
+    collaborator: 'Cockti Juicy Fried Chicken',
+    status: 'Active',
+    desc: 'A bold green-heat blend that pushes jalapeño past its usual supporting role and into the center of the flavor experience — bright, aggressive, and unapologetic. The second Cockti collaboration. No derivatives at this juncture. The blend stands entirely on its own.',
+    lesson: 'Some ingredients are waiting to be given permission to be loud.',
+    royalty: 'Named founding collaborator. Royalty tracking in place. No downstream derivatives at this time.',
+    parentId: null
+  },
+  {
+    id: '003', number: '003', type: 'source',
+    name: '50 Hertz Foods',
+    collaborator: 'Yao, Founder — Washington D.C.',
+    status: 'Active',
+    desc: 'A source relationship with 50 Hertz Foods, founded by Yao and operating out of Washington D.C., establishing direct provenance for the Sichuan peppercorn material used across the Season Deez platform. Yao sources directly from Sichuan Province, China. Season Deez is recognized on the 50 Hertz Foods website as part of their community of producers and collaborators. Not a formal commercial partnership at this time — an honest relationship between two people serious about the same ingredient.',
+    lesson: 'When the source is this specific, naming it is not courtesy — it is credential.',
+    royalty: 'Informal source relationship. No commercial agreement in place. Provenance credit given on all Season Deez products using 50 Hertz material. Formal partnership terms to be established as the relationship develops.',
+    parentId: null
+  },
+  {
+    id: 'olio', number: null, type: 'derivative',
+    name: 'Sichuan Olio Saccharum Extract',
+    collaborator: '50 Hertz Foods — Yao, Washington D.C.',
+    status: 'Active',
+    desc: 'A slow-extracted olio using only Sichuan peppercorns sourced through 50 Hertz Foods, isolating the raw sanshool compound in its most concentrated and elegant form. The proof of concept for what the 50 Hertz source relationship makes possible at a product level.',
+    lesson: 'Strip everything away and see what the ingredient actually is. That is where the real product lives.',
+    royalty: 'Derives from Drop 003. 50 Hertz provenance credited on product. Formal royalty terms to be established as the relationship develops.',
+    parentId: '003'
+  },
+  {
+    id: 'buzz-pops', number: null, type: 'derivative',
+    name: 'Buzz Pops',
+    collaborator: '50 Hertz Foods — Yao, Washington D.C.',
+    desc: 'A frozen pop delivering the full paresthesia experience of the Sichuan compound over a slow dissolve. THC-free. The tingle is the active ingredient.',
+    lesson: 'The mouth remembers what the mind forgets.',
+    royalty: 'Derives from Drop 003. 50 Hertz provenance in product record. Royalty tracked upstream.',
+    parentId: '003'
+  }
+];
+
+// ============================================================
+// TREE BUILDER
+// ============================================================
+function buildTree(data) {
+  const map = {};
+  const roots = [];
+  data.forEach(n => { map[n.id] = Object.assign({}, n, { children: [] }); });
+  data.forEach(n => {
+    if (n.parentId && map[n.parentId]) {
+      map[n.parentId].children.push(map[n.id]);
+    } else if (!n.parentId) {
+      roots.push(map[n.id]);
+    }
+  });
+  return roots;
+}
+
+// ============================================================
+// TYPE CONFIG
+// ============================================================
+const typeLabel = { source: 'Source Relationship', drop: 'Collaborator Drop', brand: 'Downstream Brand', derivative: 'Derivative / Format' };
+const typeBadge = { source: 'b-source', drop: 'b-drop', brand: 'b-brand', derivative: 'b-derivative' };
+const typeClass = { source: 't-source', drop: 't-drop', brand: 't-brand', derivative: 't-derivative' };
+
+// ============================================================
+// MAKE NODE CARD
+// ============================================================
+function makeNode(node, ancestors) {
+  var el = document.createElement('div');
+  el.className = 'node ' + (typeClass[node.type] || '');
+
+  var provHTML = '';
+  if (ancestors.length) {
+    provHTML = '<div class="provenance">';
+    ancestors.forEach(function(a, i) {
+      provHTML += '<span class="prov-chip">' + (a.number ? a.number + ' — ' : '') + a.name + '</span>';
+      provHTML += '<span class="prov-arrow">→</span>';
+    });
+    provHTML += '<span class="prov-chip" style="border-color:var(--rust);color:var(--rust);">' + node.name + '</span></div>';
+  }
+
+  var statusKey = 'b-' + (node.status || 'active').toLowerCase();
+
+  el.innerHTML =
+    '<div class="node-meta">' +
+      '<span class="badge ' + (typeBadge[node.type] || '') + '">' + (typeLabel[node.type] || node.type) + '</span>' +
+      '<span class="badge ' + statusKey + '">' + node.status + '</span>' +
+    '</div>' +
+    (node.number ? '<div class="node-num">Drop ' + node.number + '</div>' : '') +
+    provHTML +
+    '<div class="node-name">' + node.name + '</div>' +
+    (node.collaborator ? '<div class="node-collab">' + node.collaborator + '</div>' : '') +
+    '<div class="node-desc">' + node.desc + '</div>' +
+    (node.lesson ? '<div class="node-lesson">' + node.lesson + '</div>' : '') +
+    (node.royalty ? '<div class="node-royalty"><strong>Partnership:</strong> ' + node.royalty + '</div>' : '');
+
+  return el;
+}
+
+// ============================================================
+// RENDER TREE
+// ============================================================
+function renderTree(nodes, container, ancestors, depth) {
+  nodes.forEach(function(node, i) {
+    if (depth === 0) {
+      var root = document.createElement('div');
+      root.className = 'root-node';
+      root.appendChild(makeNode(node, []));
+      if (node.children && node.children.length) {
+        var ch = document.createElement('div');
+        ch.className = 'children';
+        renderTree(node.children, ch, [node], 1);
+        root.appendChild(ch);
+      }
+      container.appendChild(root);
+      if (i < nodes.length - 1) {
+        var gap = document.createElement('div');
+        gap.className = 'spine-gap';
+        container.appendChild(gap);
+      }
+    } else {
+      container.appendChild(makeNode(node, ancestors));
+      if (node.children && node.children.length) {
+        var gc = document.createElement('div');
+        gc.className = 'grandchildren';
+        renderTree(node.children, gc, ancestors.concat([node]), depth + 1);
+        container.appendChild(gc);
+      }
+    }
+  });
+}
+
+// ============================================================
+// HERO STATS
+// ============================================================
+function renderStats() {
+  var drops   = lineageData.filter(function(n){ return n.type === 'drop'; }).length;
+  var sources = lineageData.filter(function(n){ return n.type === 'source'; }).length;
+  var brands  = lineageData.filter(function(n){ return n.type === 'brand'; }).length;
+  var formats = lineageData.filter(function(n){ return n.type === 'derivative'; }).length;
+  document.getElementById('hero-stats').innerHTML =
+    '<div class="stat"><span class="stat-n">' + drops   + '</span><span class="stat-l">Collaborator Drops</span></div>' +
+    '<div class="stat"><span class="stat-n">' + sources + '</span><span class="stat-l">Source Relationships</span></div>' +
+    '<div class="stat"><span class="stat-n">' + brands  + '</span><span class="stat-l">Downstream Brands</span></div>' +
+    '<div class="stat"><span class="stat-n">' + formats + '</span><span class="stat-l">Derivatives & Formats</span></div>';
+}
+
+// ============================================================
+// PARTNER LIST
+// Shows unique named collaborators only.
+// Filters out source-material credits and derivative entries
+// that duplicate the parent source relationship.
+// Royalty tracked only shown when royalty field is formal.
+// ============================================================
+function renderPartners() {
+  var seen = {};
+  var html = '';
+
+  lineageData.forEach(function(n) {
+    if (!n.collaborator) return;
+    if (!n.status === 'Active') return;
+
+    // Suppress derivative-level source credits like
+    // "50 Hertz Foods — source material" or "50 Hertz Foods — Yao, Washington D.C."
+    // when the source node itself is already listed as a root entry.
+    // We only want the top-level named person or brand, not the repeated child credits.
+    var cleanKey = n.collaborator.split('—')[0].trim().split(',')[0].trim();
+    if (seen[cleanKey]) return;
+    seen[cleanKey] = true;
+
+    // Only show "Royalty tracked" if there is a formal royalty note
+    // i.e. the royalty field exists and does not contain "Informal" or "to be established"
+    var showRoyalty = n.royalty &&
+      n.royalty.indexOf('Informal') === -1 &&
+      n.royalty.indexOf('to be established') === -1;
+
+    // Human-readable role label
+    var roleMap = {
+      source: 'Source Relationship',
+      drop: 'Collaborator Drop',
+      brand: 'Downstream Brand',
+      derivative: 'Derivative / Format'
+    };
+
+    html +=
+      '<div class="partner-item">' +
+        '<div class="partner-name">' + n.collaborator.split('—')[0].trim() + '</div>' +
+        '<div class="partner-role">' +
+          (roleMap[n.type] || n.type) + ' · ' + n.name +
+          (showRoyalty ? ' · Royalty tracked' : '') +
+        '</div>' +
+      '</div>';
+  });
+
+  document.getElementById('partner-list').innerHTML =
+    html || '<p style="font-size:0.82rem;color:var(--muted);">No active partners yet.</p>';
+}
+
+// ============================================================
+// RERENDER — rebuilds the full tree from current lineageData
+// ============================================================
+function rerender() {
+  renderStats();
+  renderPartners();
+  var container = document.getElementById('tree');
+  container.innerHTML = '';
+  var roots = buildTree(lineageData);
+  if (!roots.length) {
+    container.innerHTML = '<p style="font-family:\'DM Mono\',monospace;font-size:0.75rem;color:var(--muted);padding:2rem 0;">No drops in the lineage yet.</p>';
+    return;
+  }
+  renderTree(roots, container, [], 0);
+}
+
+// ============================================================
+// AIRTABLE VIA NETLIFY FUNCTION
+// Calls /api/airtable — credentials stay on Netlify's servers.
+// ============================================================
+function atSave(table, fields) {
+  return fetch('/api/airtable', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ table: table, fields: fields })
+  }).then(function(r) {
+    if (!r.ok) throw new Error('Function error ' + r.status);
+    return r.json();
+  });
+}
+
+// ============================================================
+// COLLAB FORM
+// Saves to Airtable Inquiries table via Netlify Function.
+// Falls back to localStorage if function is unavailable.
+// ============================================================
+function submitCollab() {
+  if (document.getElementById('c-hp').value) return;
+  var msg   = document.getElementById('c-msg');
+  var name  = document.getElementById('c-name').value.trim();
+  var email = document.getElementById('c-email').value.trim();
+  var type  = document.getElementById('c-type').value;
+  var idea  = document.getElementById('c-idea').value.trim();
+  var src   = document.getElementById('c-source').value.trim();
+  if (!name || !email || !type || !idea) {
+    msg.textContent = 'Please fill in all required fields.';
+    msg.className = 'fmsg err';
+    return;
+  }
+  var entry = { Name: name, Email: email, Type: type, Idea: idea, Source: src, CreatedAt: new Date().toISOString(), Status: 'New' };
+  msg.textContent = 'Sending...';
+  msg.className = 'fmsg';
+  atSave('Inquiries', entry)
+    .then(function() {
+      msg.textContent = "Received. We'll be in touch.";
+      msg.className = 'fmsg';
+      document.getElementById('c-name').value = '';
+      document.getElementById('c-email').value = '';
+      document.getElementById('c-idea').value = '';
+      document.getElementById('c-source').value = '';
+      document.getElementById('c-type').selectedIndex = 0;
+    })
+    .catch(function() {
+      // Fallback to localStorage if Netlify Function is unavailable
+      var inqs = [];
+      try { inqs = JSON.parse(localStorage.getItem('sd_inqs') || '[]'); } catch(e) {}
+      inqs.push({ name: name, email: email, type: type, idea: idea, source: src, createdAt: new Date().toISOString(), status: 'New' });
+      localStorage.setItem('sd_inqs', JSON.stringify(inqs));
+      msg.textContent = "Received. We'll be in touch.";
+      msg.className = 'fmsg';
+      document.getElementById('c-name').value = '';
+      document.getElementById('c-email').value = '';
+      document.getElementById('c-idea').value = '';
+      document.getElementById('c-source').value = '';
+      document.getElementById('c-type').selectedIndex = 0;
+    });
+}
+
+// ============================================================
+// NEWSLETTER
+// Saves to Airtable Newsletter table via Netlify Function.
+// Falls back to localStorage if function is unavailable.
+// ============================================================
+function submitNewsletter() {
+  var el  = document.getElementById('nl-email');
+  var msg = document.getElementById('nl-msg');
+  var em  = el.value.trim();
+  if (!em || em.indexOf('@') === -1) {
+    msg.textContent = 'Drop a real email in there.';
+    msg.className = 'fmsg err';
+    return;
+  }
+  msg.textContent = 'Saving...';
+  msg.className = 'fmsg';
+  atSave('Newsletter', { Email: em, SignedUpAt: new Date().toISOString() })
+    .then(function() {
+      msg.textContent = "You're in.";
+      msg.className = 'fmsg';
+      el.value = '';
+    })
+    .catch(function() {
+      // Fallback to localStorage
+      var emails = [];
+      try { emails = JSON.parse(localStorage.getItem('sd_emails') || '[]'); } catch(e) {}
+      if (emails.indexOf(em) === -1) emails.push(em);
+      localStorage.setItem('sd_emails', JSON.stringify(emails));
+      msg.textContent = "You're in.";
+      msg.className = 'fmsg';
+      el.value = '';
+    });
+}
+
+// ============================================================
+// ADMIN AUTH
+// ============================================================
+function openAdmin() {
+  if (sessionStorage.getItem('sd_auth') === '1') {
+    showDash();
+  } else {
+    document.getElementById('pw-prompt').classList.add('open');
+    setTimeout(function(){ document.getElementById('pw-input').focus(); }, 50);
+  }
+}
+function checkPw() {
+  var val = document.getElementById('pw-input').value;
+  if (val === ADMIN_PASSWORD) {
+    sessionStorage.setItem('sd_auth', '1');
+    document.getElementById('pw-prompt').classList.remove('open');
+    document.getElementById('pw-input').value = '';
+    showDash();
+  } else {
+    document.getElementById('pw-err').textContent = 'Incorrect.';
+    document.getElementById('pw-input').value = '';
+  }
+}
+document.getElementById('pw-input').addEventListener('keydown', function(e){ if (e.key === 'Enter') checkPw(); });
+
+function showDash() {
+  document.getElementById('admin-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  loadInquiries();
+  loadEmails();
+}
+function closeAdmin() {
+  document.getElementById('admin-overlay').classList.remove('open');
+  document.getElementById('pw-prompt').classList.remove('open');
+  document.body.style.overflow = '';
+  history.replaceState(null, '', window.location.pathname);
+}
+
+// ============================================================
+// ADMIN — ADD NODE
+// ============================================================
+function adminAddNode() {
+  var name = document.getElementById('a-name').value.trim();
+  var desc = document.getElementById('a-desc').value.trim();
+  var msg  = document.getElementById('a-msg');
+  if (!name || !desc) {
+    msg.textContent = 'Name and description are required.';
+    msg.className = 'fmsg err';
+    return;
+  }
+  var node = {
+    id: 'u-' + Date.now(),
+    number: document.getElementById('a-num').value.trim() || null,
+    type: document.getElementById('a-type').value,
+    name: name,
+    collaborator: document.getElementById('a-collab').value.trim() || null,
+    status: document.getElementById('a-status').value,
+    desc: desc,
+    lesson: document.getElementById('a-lesson').value.trim() || '',
+    royalty: document.getElementById('a-royalty').value.trim() || null,
+    parentId: document.getElementById('a-parent').value.trim() || null
+  };
+  lineageData.push(node);
+  rerender();
+  ['a-name','a-num','a-parent','a-collab','a-desc','a-lesson','a-royalty'].forEach(function(id){ document.getElementById(id).value = ''; });
+  document.getElementById('a-type').value = 'drop';
+  document.getElementById('a-status').value = 'Active';
+  msg.textContent = 'Added to lineage.';
+  msg.className = 'fmsg';
+}
+
+// ============================================================
+// ADMIN — INQUIRIES
+// ============================================================
+function loadInquiries() {
+  var container = document.getElementById('inq-list');
+  var inqs = [];
+  try { inqs = JSON.parse(localStorage.getItem('sd_inqs') || '[]'); } catch(e) {}
+  inqs = inqs.filter(function(i){ return i.status === 'New'; });
+  if (!inqs.length) {
+    container.innerHTML = '<p style="color:var(--muted);font-size:0.82rem;font-style:italic;">No new inquiries.</p>';
+    return;
+  }
+  container.innerHTML = '';
+  inqs.forEach(function(inq, i) {
+    var el = document.createElement('div');
+    el.className = 'inq-item';
+    el.id = 'inq-' + i;
+    el.innerHTML =
+      '<p><strong>' + inq.name + '</strong> · ' + inq.type + ' · ' + inq.email + '</p>' +
+      '<p>' + inq.idea + '</p>' +
+      (inq.source ? '<p style="font-style:italic;opacity:0.6;">Via: ' + inq.source + '</p>' : '') +
+      '<p style="opacity:0.35;font-size:0.68rem;">' + inq.createdAt + '</p>' +
+      '<div class="inq-actions"><button class="btn btn-sm" onclick="archiveInq(' + i + ')">Archive</button></div>';
+    container.appendChild(el);
+  });
+}
+function archiveInq(i) {
+  var inqs = [];
+  try { inqs = JSON.parse(localStorage.getItem('sd_inqs') || '[]'); } catch(e) {}
+  if (inqs[i]) inqs[i].status = 'Archived';
+  localStorage.setItem('sd_inqs', JSON.stringify(inqs));
+  var el = document.getElementById('inq-' + i);
+  if (el) el.remove();
+}
+
+// ============================================================
+// ADMIN — EMAILS
+// ============================================================
+function loadEmails() {
+  var emails = [];
+  try { emails = JSON.parse(localStorage.getItem('sd_emails') || '[]'); } catch(e) {}
+  document.getElementById('email-dump').textContent = emails.length ? emails.join('\n') : 'No emails yet.';
+}
+
+// ============================================================
+// NAV SCROLL
+// ============================================================
+window.addEventListener('scroll', function() {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// ============================================================
+// HASH ROUTING — yoursite.com#admin opens dashboard
+// ============================================================
+function checkHash() {
+  if (window.location.hash === '#admin') openAdmin();
+}
+window.addEventListener('hashchange', checkHash);
+
+// ============================================================
+// INIT — loads all drops from Airtable then renders
+// Shows a loading state while data is fetching.
+// Falls back gracefully if Airtable is unreachable.
+// ============================================================
+function showLoading() {
+  document.getElementById('tree').innerHTML =
+    '<p style="font-family:\'DM Mono\',monospace;font-size:0.75rem;color:var(--muted);padding:2rem 0;letter-spacing:0.1em;">Loading the lineage...</p>';
+}
+
+function showError() {
+  document.getElementById('tree').innerHTML =
+    '<p style="font-family:\'DM Mono\',monospace;font-size:0.75rem;color:#c0392b;padding:2rem 0;">Could not load drops. Please refresh.</p>';
+}
+
+async function loadFromAirtable() {
+  try {
+    var res  = await fetch('/api/airtable?table=Drops');
+    var rows = await res.json();
+    if (!Array.isArray(rows) || rows.length === 0) {
+      showError(); return;
+    }
+    // Map Airtable rows to lineageData format
+    // The id used for tree relationships is the Number field if present,
+    // otherwise the Airtable record ID. ParentId must match accordingly.
+    rows.forEach(function(row) {
+      var f = row.fields;
+      // Use Number as id if present so ParentId references work
+      // e.g. ParentId "001" matches Number "001"
+      // For brand/derivative nodes without a number, use the Name
+      // lowercased and stripped of spaces as the id
+      var nodeId = f.Number
+        ? f.Number
+        : f.Name.toLowerCase().replace(/\s+/g, '-');
+
+      lineageData.push({
+        id:           nodeId,
+        number:       f.Number || null,
+        type:         f.Type || 'derivative',
+        name:         f.Name || '',
+        collaborator: f.Collaborator || null,
+        status:       f.Status || 'Active',
+        desc:         f.Description || '',
+        lesson:       f.Lesson || '',
+        royalty:      f.Royalty || null,
+        parentId:     f.ParentId || null
+      });
+    });
+    rerender();
+  } catch(e) {
+    console.warn('Failed to load from Airtable:', e);
+    showError();
+  }
+}
+
+function init() {
+  showLoading();
+  renderStats();
+  loadFromAirtable();
+  checkHash();
+}
+
+init();
+</script>
+</body>
+</html>
