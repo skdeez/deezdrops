@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -441,29 +442,27 @@ const lineageData = [
   {
     id: '003', number: '003', type: 'source',
     name: '50 Hertz Foods',
-    collaborator: 'Yao — Sichuan Province, China',
+    collaborator: 'Yao, Founder — Washington D.C.',
     status: 'Active',
-    desc: 'A direct source relationship establishing province-level provenance for all Sichuan peppercorn material used across the Season Deez platform. Elevated to Drop 003 because the source is not background — it is the product. Every derivative downstream carries the 50 Hertz name explicitly.',
+    desc: 'A source relationship with 50 Hertz Foods, founded by Yao and operating out of Washington D.C., establishing direct provenance for the Sichuan peppercorn material used across the Season Deez platform. Yao sources directly from Sichuan Province, China. Season Deez is recognized on the 50 Hertz Foods website as part of their community of producers and collaborators. Not a formal commercial partnership at this time — an honest relationship between two people serious about the same ingredient.',
     lesson: 'When the source is this specific, naming it is not courtesy — it is credential.',
-    royalty: 'Named source partner. 50 Hertz branding appears on downstream Sichuan-derived products under a royalty arrangement that mirrors the chef collaboration model. Provenance credit tracked per SKU.',
+    royalty: 'Informal source relationship. No commercial agreement in place. Provenance credit given on all Season Deez products using 50 Hertz material. Formal partnership terms to be established as the relationship develops.',
     parentId: null
   },
   {
     id: 'olio', number: null, type: 'derivative',
     name: 'Sichuan Olio Saccharum Extract',
-    collaborator: '50 Hertz Foods — source material',
+    collaborator: '50 Hertz Foods — Yao, Washington D.C.',
     status: 'Active',
-    desc: 'A slow-extracted olio using only Sichuan peppercorns from 50 Hertz Foods, isolating the raw sanshool compound in its most concentrated and elegant form. The proof of concept for the 50 Hertz source relationship as a product-level asset.',
+    desc: 'A slow-extracted olio using only Sichuan peppercorns sourced through 50 Hertz Foods, isolating the raw sanshool compound in its most concentrated and elegant form. The proof of concept for what the 50 Hertz source relationship makes possible at a product level.',
     lesson: 'Strip everything away and see what the ingredient actually is. That is where the real product lives.',
-    royalty: 'Derives from Drop 003. 50 Hertz provenance credited on product. Royalty tracked upstream.',
+    royalty: 'Derives from Drop 003. 50 Hertz provenance credited on product. Formal royalty terms to be established as the relationship develops.',
     parentId: '003'
   },
   {
     id: 'buzz-pops', number: null, type: 'derivative',
     name: 'Buzz Pops',
-    collaborator: '50 Hertz Foods — source material',
-    status: 'Experimental',
-    desc: 'A sanshool-forward confection delivering the full paresthesia experience of the Sichuan compound over a slow dissolve. THC-free. The tingle is the active ingredient.',
+    collaborator: '50 Hertz Foods — Yao, Washington D.C.', delivering the full paresthesia experience of the Sichuan compound over a slow dissolve. THC-free. The tingle is the active ingredient.',
     lesson: 'The mouth remembers what the mind forgets.',
     royalty: 'Derives from Drop 003. 50 Hertz provenance in product record. Royalty tracked upstream.',
     parentId: '003'
@@ -822,20 +821,68 @@ function checkHash() {
 window.addEventListener('hashchange', checkHash);
 
 // ============================================================
-// RENDER
+// INIT — loads all drops from Airtable then renders
+// Shows a loading state while data is fetching.
+// Falls back gracefully if Airtable is unreachable.
 // ============================================================
-function rerender() {
-  var container = document.getElementById('tree');
-  container.innerHTML = '';
-  var tree = buildTree(lineageData);
-  renderTree(tree, container, [], 0);
-  renderStats();
-  renderPartners();
+function showLoading() {
+  document.getElementById('tree').innerHTML =
+    '<p style="font-family:\'DM Mono\',monospace;font-size:0.75rem;color:var(--muted);padding:2rem 0;letter-spacing:0.1em;">Loading the lineage...</p>';
 }
 
-// INIT — runs immediately when page loads
-rerender();
-checkHash();
+function showError() {
+  document.getElementById('tree').innerHTML =
+    '<p style="font-family:\'DM Mono\',monospace;font-size:0.75rem;color:#c0392b;padding:2rem 0;">Could not load drops. Please refresh.</p>';
+}
+
+async function loadFromAirtable() {
+  try {
+    var res  = await fetch('/api/airtable?table=Drops');
+    var rows = await res.json();
+    if (!Array.isArray(rows) || rows.length === 0) {
+      showError(); return;
+    }
+    // Map Airtable rows to lineageData format
+    // The id used for tree relationships is the Number field if present,
+    // otherwise the Airtable record ID. ParentId must match accordingly.
+    rows.forEach(function(row) {
+      var f = row.fields;
+      // Use Number as id if present so ParentId references work
+      // e.g. ParentId "001" matches Number "001"
+      // For brand/derivative nodes without a number, use the Name
+      // lowercased and stripped of spaces as the id
+      var nodeId = f.Number
+        ? f.Number
+        : f.Name.toLowerCase().replace(/\s+/g, '-');
+
+      lineageData.push({
+        id:           nodeId,
+        number:       f.Number || null,
+        type:         f.Type || 'derivative',
+        name:         f.Name || '',
+        collaborator: f.Collaborator || null,
+        status:       f.Status || 'Active',
+        desc:         f.Description || '',
+        lesson:       f.Lesson || '',
+        royalty:      f.Royalty || null,
+        parentId:     f.ParentId || null
+      });
+    });
+    rerender();
+  } catch(e) {
+    console.warn('Failed to load from Airtable:', e);
+    showError();
+  }
+}
+
+function init() {
+  showLoading();
+  renderStats();
+  loadFromAirtable();
+  checkHash();
+}
+
+init();
 </script>
 </body>
 </html>
