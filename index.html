@@ -803,10 +803,16 @@ async function loadFromAirtable() {
         parentId:     f.ParentId || null
       });
     });
+    // Sort by number so 001, 002, 003 always appear in order
+    lineageData.sort(function(a, b) {
+      var aNum = a.number ? parseInt(a.number, 10) : 999;
+      var bNum = b.number ? parseInt(b.number, 10) : 999;
+      return aNum - bNum;
+    });
     rerender();
   } catch(e) {
     console.warn('Failed to load from Airtable:', e);
-    showError();
+    rerender();
   }
 }
 
