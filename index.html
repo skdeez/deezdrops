@@ -185,11 +185,15 @@ nav.scrolled { background: var(--bark); box-shadow: 0 2px 20px rgba(0,0,0,0.4); 
   margin-left: 2rem; margin-top: 1.5rem;
   position: relative;
   transition: transform 0.25s, box-shadow 0.25s;
-  opacity: 0; transform: translateY(14px);
-}
-.node.vis {
+  /* Visible by default — animation is an enhancement, not a gate */
   opacity: 1; transform: translateY(0);
-  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.node.animated {
+  animation: slideUp 0.5s ease both;
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 .node:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.09); }
 
@@ -730,9 +734,9 @@ footer { background: #080503; padding: 5rem 2rem 3rem; text-align: center; }
    Change ADMIN_PASSWORD before publishing.
    Paste Airtable credentials to activate persistence.
    ============================================================ */
-const ADMIN_PASSWORD   = ‘szn2026’; // ← CHANGE BEFORE PUBLISHING
-const AIRTABLE_API_KEY = ’pat3ZdhDB27cqQykF.f65fb57db520bc46f2c4f2a97cb05c9c149fcd23682e7235d977098464c4839b’;             // ← Your Airtable Personal Access Token
-const AIRTABLE_BASE_ID = 'ioNqsBRydZJ0Pr/tblF6q0GkvUE0BqZH';            // ← Your Airtable Base ID (starts with "app")
+const ADMIN_PASSWORD   = 'changeme2024'; // ← CHANGE BEFORE PUBLISHING
+const AIRTABLE_API_KEY = '';             // ← Your Airtable Personal Access Token
+const AIRTABLE_BASE_ID = '';            // ← Your Airtable Base ID (starts with "app")
 
 /* ============================================================
    LINEAGE DATA
@@ -879,13 +883,18 @@ function buildTree(data) {
 
 /* ============================================================
    INTERSECTION OBSERVER
-   Fires only when elements enter the viewport — far more
-   performant than a scroll event listener which fires hundreds
-   of times per second and forces main-thread layout work.
+   Cards default to visible. The observer adds the 'animated'
+   class which triggers the slide-up effect only when the card
+   enters the viewport. Content is never hidden waiting for JS.
    ============================================================ */
 const obs = new IntersectionObserver(entries => {
-  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('vis'); obs.unobserve(e.target); } });
-}, { threshold: 0.07 });
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('animated');
+      obs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
 
 /* ============================================================
    TYPE CONFIG
@@ -923,7 +932,8 @@ function makeNode(node, ancestors) {
     ${node.lesson ? `<div class="node-lesson">${node.lesson}</div>` : ''}
     ${node.royalty ? `<div class="node-royalty"><strong>Partnership:</strong> ${node.royalty}</div>` : ''}
   `;
-  obs.observe(el);
+  // Register with observer for animation — card is already visible
+  requestAnimationFrame(() => obs.observe(el));
   return el;
 }
 
