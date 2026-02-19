@@ -1,5 +1,5 @@
-
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -12,20 +12,28 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --ink:        #0f0b06;
-  --bark:       #2a1c0f;
-  --rust:       #c45e2a;
-  --gold:       #c9983a;
-  --gold-light: #e8c97a;
-  --cream:      #f5f0e8;
-  --parchment:  #ede6d6;
-  --muted:      #7a6e60;
-  --border:     #ddd5c0;
-  --card:       #faf6ee;
-  --source-col:     #2d6a4f;
-  --drop-col:       #c45e2a;
-  --derivative-col: #6b4f8c;
-  --brand-col:      #b8960c;
+  /* ── BASE ── */
+  --ink:        #0a0f0d;
+  --bark:       #112318;
+  --rust:       #b94f2a;
+  --gold:       #b8922a;
+  --gold-light: #d4b86a;
+  --cream:      #f2f0e8;
+  --parchment:  #e8e4d8;
+  --muted:      #6e7d72;
+  --border:     #c8d4c4;
+  --card:       #f7f8f4;
+
+  /* ── HERO / FOOTER backgrounds ── */
+  --hero-bg:    #0d1f16;
+  --footer-bg:  #071209;
+  --admin-bg:   #091510;
+
+  /* ── NODE TYPE ACCENTS ── */
+  --source-col:     #2d6a4f;   /* forest green */
+  --drop-col:       #b94f2a;   /* rust — accent only */
+  --derivative-col: #4a6741;   /* muted sage */
+  --brand-col:      #b8922a;   /* aged brass */
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
@@ -41,8 +49,19 @@ nav.scrolled { background: var(--bark); box-shadow: 0 2px 20px rgba(0,0,0,0.4); 
 .nav-links a:hover { opacity: 1; }
 
 /* HERO */
-#hero { min-height: 100vh; background: var(--bark); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 7rem 2rem 5rem; position: relative; overflow: hidden; }
-#hero::before { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse at 15% 65%, rgba(196,94,42,0.18) 0%, transparent 55%), radial-gradient(ellipse at 82% 20%, rgba(201,152,58,0.12) 0%, transparent 45%); }
+#hero { min-height: 100vh; background: var(--hero-bg); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 7rem 2rem 5rem; position: relative; overflow: hidden; }
+#hero::before { content: ''; position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse at 15% 65%, rgba(45,106,79,0.22) 0%, transparent 55%),
+    radial-gradient(ellipse at 82% 20%, rgba(184,146,42,0.14) 0%, transparent 45%),
+    radial-gradient(ellipse at 50% 100%, rgba(185,79,42,0.1) 0%, transparent 40%); }
+.hero-eyebrow { color: var(--gold); }
+.hero-mark { color: var(--cream); }
+.hero-mark span { color: var(--rust); }
+.hero-sub { color: var(--gold-light); }
+.hero-stats { border-top: 1px solid rgba(255,255,255,0.08); }
+.stat-n { color: var(--gold-light); }
+.stat-l { color: var(--muted); }
 .hero-eyebrow { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.6rem; opacity: 0.75; position: relative; z-index: 1; }
 .hero-mark { font-family: 'Playfair Display', serif; font-size: clamp(4rem, 11vw, 9rem); font-weight: 700; line-height: 0.92; color: var(--cream); position: relative; z-index: 1; margin-bottom: 0.25em; }
 .hero-mark span { color: var(--rust); }
@@ -58,21 +77,21 @@ nav.scrolled { background: var(--bark); box-shadow: 0 2px 20px rgba(0,0,0,0.4); 
 .wrap { padding: 6rem 0; }
 .inner { max-width: 1080px; margin: 0 auto; padding: 0 2rem; }
 .eyebrow { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.5rem; }
-.section-title { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 4vw, 2.7rem); font-weight: 700; color: var(--bark); margin-bottom: 0.5rem; line-height: 1.1; }
+.section-title { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 4vw, 2.7rem); font-weight: 700; color: #1a2e20; margin-bottom: 0.5rem; line-height: 1.1; }
 .section-intro { font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(0.95rem, 1.5vw, 1.1rem); color: var(--muted); max-width: 620px; line-height: 1.75; margin-bottom: 4rem; }
 
 /* LINEAGE TREE */
 .tree { display: flex; flex-direction: column; }
 .root-node { display: flex; flex-direction: column; border-left: 2px solid var(--border); margin-left: 1rem; position: relative; }
-.root-node::before { content: ''; position: absolute; left: -7px; top: 2.6rem; width: 12px; height: 12px; border-radius: 50%; background: var(--gold); border: 2px solid var(--cream); z-index: 2; }
+.root-node::before { content: ''; position: absolute; left: -7px; top: 2.6rem; width: 12px; height: 12px; border-radius: 50%; background: var(--gold); border: 2px solid var(--card); z-index: 2; }
 .spine-gap { height: 2.5rem; border-left: 2px solid var(--border); margin-left: 1rem; }
 
 /* NODE CARD */
 .node { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.6rem 1.8rem; margin-left: 2rem; margin-top: 1.5rem; position: relative; transition: transform 0.25s, box-shadow 0.25s; }
-.node:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.09); }
+.node:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(13,31,22,0.12); }
 .node::before { content: ''; position: absolute; left: -2rem; top: 2.5rem; width: 2rem; height: 1px; background: var(--border); }
 .t-source     { border-left: 3px solid var(--source-col); }
-.t-drop       { border-left: 3px solid var(--drop-col); }
+.t-drop       { border-left: 3px solid var(--rust); }
 .t-brand      { border-left: 3px solid var(--brand-col); }
 .t-derivative { border-left: 3px solid var(--derivative-col); }
 .children { margin-left: 2.5rem; border-left: 1px dashed var(--border); padding-bottom: 1.5rem; }
@@ -83,22 +102,22 @@ nav.scrolled { background: var(--bark); box-shadow: 0 2px 20px rgba(0,0,0,0.4); 
 /* NODE INTERNALS */
 .node-meta { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.85rem; }
 .badge { font-size: 0.58rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.2em 0.7em; border-radius: 99px; }
-.b-source     { background: rgba(45,106,79,0.1);   color: var(--source-col); }
-.b-drop       { background: rgba(196,94,42,0.1);   color: var(--drop-col); }
-.b-brand      { background: rgba(184,150,12,0.12); color: var(--brand-col); }
-.b-derivative { background: rgba(107,79,140,0.1);  color: var(--derivative-col); }
-.b-active       { background: rgba(45,106,79,0.08);  color: var(--source-col); }
-.b-experimental { background: rgba(107,79,140,0.08); color: var(--derivative-col); }
-.b-limited      { background: rgba(196,94,42,0.08);  color: var(--drop-col); }
-.b-retired      { background: rgba(122,110,96,0.08); color: var(--muted); }
+.b-source     { background: rgba(45,106,79,0.12);  color: #1e5e3a; }
+.b-drop       { background: rgba(185,79,42,0.1);   color: #a03820; }
+.b-brand      { background: rgba(184,146,42,0.12); color: #8a6a10; }
+.b-derivative { background: rgba(74,103,65,0.1);   color: #3a5a30; }
+.b-active       { background: rgba(45,106,79,0.1);  color: #1e5e3a; }
+.b-experimental { background: rgba(74,103,65,0.1);  color: #3a5a30; }
+.b-limited      { background: rgba(185,79,42,0.1);  color: #a03820; }
+.b-retired      { background: rgba(110,125,114,0.1);color: var(--muted); }
 .node-num { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 0.15rem; }
-.node-name { font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 700; color: var(--bark); line-height: 1.2; margin-bottom: 0.35rem; }
+.node-name { font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 700; color: #1a2e20; line-height: 1.2; margin-bottom: 0.35rem; }
 .node-collab { font-size: 0.75rem; font-weight: 500; color: var(--rust); margin-bottom: 0.85rem; display: flex; align-items: center; gap: 0.35rem; }
 .node-collab::before { content: '↗'; }
-.node-desc { font-size: 0.88rem; color: #3d2e1e; line-height: 1.65; margin-bottom: 0.9rem; max-width: 560px; }
+.node-desc { font-size: 0.88rem; color: #2e3d2e; line-height: 1.65; margin-bottom: 0.9rem; max-width: 560px; }
 .node-lesson { font-family: 'Playfair Display', serif; font-style: italic; font-size: 0.8rem; color: var(--muted); border-left: 2px solid var(--gold); padding-left: 0.8rem; line-height: 1.5; margin-bottom: 0.85rem; }
 .node-royalty { font-size: 0.72rem; color: var(--muted); background: var(--parchment); border: 1px dashed var(--border); border-radius: 6px; padding: 0.5rem 0.8rem; line-height: 1.55; }
-.node-royalty strong { color: var(--bark); font-weight: 500; }
+.node-royalty strong { color: #1a2e20; font-weight: 500; }
 .provenance { display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 0.8rem; }
 .prov-chip { font-size: 0.6rem; letter-spacing: 0.07em; font-weight: 500; padding: 0.18em 0.6em; border-radius: 99px; background: var(--parchment); color: var(--muted); border: 1px solid var(--border); }
 .prov-arrow { color: var(--border); font-size: 0.65rem; }
@@ -578,20 +597,53 @@ function renderStats() {
 
 // ============================================================
 // PARTNER LIST
+// Shows unique named collaborators only.
+// Filters out source-material credits and derivative entries
+// that duplicate the parent source relationship.
+// Royalty tracked only shown when royalty field is formal.
 // ============================================================
 function renderPartners() {
   var seen = {};
   var html = '';
+
   lineageData.forEach(function(n) {
-    if (n.collaborator && n.status === 'Active' && !seen[n.collaborator]) {
-      seen[n.collaborator] = true;
-      html += '<div class="partner-item">' +
-        '<div class="partner-name">' + n.collaborator + '</div>' +
-        '<div class="partner-role">' + (typeLabel[n.type] || n.type) + ' · ' + n.name + (n.royalty ? ' · Royalty tracked' : '') + '</div>' +
-        '</div>';
-    }
+    if (!n.collaborator) return;
+    if (!n.status === 'Active') return;
+
+    // Suppress derivative-level source credits like
+    // "50 Hertz Foods — source material" or "50 Hertz Foods — Yao, Washington D.C."
+    // when the source node itself is already listed as a root entry.
+    // We only want the top-level named person or brand, not the repeated child credits.
+    var cleanKey = n.collaborator.split('—')[0].trim().split(',')[0].trim();
+    if (seen[cleanKey]) return;
+    seen[cleanKey] = true;
+
+    // Only show "Royalty tracked" if there is a formal royalty note
+    // i.e. the royalty field exists and does not contain "Informal" or "to be established"
+    var showRoyalty = n.royalty &&
+      n.royalty.indexOf('Informal') === -1 &&
+      n.royalty.indexOf('to be established') === -1;
+
+    // Human-readable role label
+    var roleMap = {
+      source: 'Source Relationship',
+      drop: 'Collaborator Drop',
+      brand: 'Downstream Brand',
+      derivative: 'Derivative / Format'
+    };
+
+    html +=
+      '<div class="partner-item">' +
+        '<div class="partner-name">' + n.collaborator.split('—')[0].trim() + '</div>' +
+        '<div class="partner-role">' +
+          (roleMap[n.type] || n.type) + ' · ' + n.name +
+          (showRoyalty ? ' · Royalty tracked' : '') +
+        '</div>' +
+      '</div>';
   });
-  document.getElementById('partner-list').innerHTML = html || '<p style="font-size:0.82rem;color:var(--muted);">No active partners yet.</p>';
+
+  document.getElementById('partner-list').innerHTML =
+    html || '<p style="font-size:0.82rem;color:var(--muted);">No active partners yet.</p>';
 }
 
 // ============================================================
