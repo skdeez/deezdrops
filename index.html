@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -578,53 +577,20 @@ function renderStats() {
 
 // ============================================================
 // PARTNER LIST
-// Shows unique named collaborators only.
-// Filters out source-material credits and derivative entries
-// that duplicate the parent source relationship.
-// Royalty tracked only shown when royalty field is formal.
 // ============================================================
 function renderPartners() {
   var seen = {};
   var html = '';
-
   lineageData.forEach(function(n) {
-    if (!n.collaborator) return;
-    if (!n.status === 'Active') return;
-
-    // Suppress derivative-level source credits like
-    // "50 Hertz Foods — source material" or "50 Hertz Foods — Yao, Washington D.C."
-    // when the source node itself is already listed as a root entry.
-    // We only want the top-level named person or brand, not the repeated child credits.
-    var cleanKey = n.collaborator.split('—')[0].trim().split(',')[0].trim();
-    if (seen[cleanKey]) return;
-    seen[cleanKey] = true;
-
-    // Only show "Royalty tracked" if there is a formal royalty note
-    // i.e. the royalty field exists and does not contain "Informal" or "to be established"
-    var showRoyalty = n.royalty &&
-      n.royalty.indexOf('Informal') === -1 &&
-      n.royalty.indexOf('to be established') === -1;
-
-    // Human-readable role label
-    var roleMap = {
-      source: 'Source Relationship',
-      drop: 'Collaborator Drop',
-      brand: 'Downstream Brand',
-      derivative: 'Derivative / Format'
-    };
-
-    html +=
-      '<div class="partner-item">' +
-        '<div class="partner-name">' + n.collaborator.split('—')[0].trim() + '</div>' +
-        '<div class="partner-role">' +
-          (roleMap[n.type] || n.type) + ' · ' + n.name +
-          (showRoyalty ? ' · Royalty tracked' : '') +
-        '</div>' +
-      '</div>';
+    if (n.collaborator && n.status === 'Active' && !seen[n.collaborator]) {
+      seen[n.collaborator] = true;
+      html += '<div class="partner-item">' +
+        '<div class="partner-name">' + n.collaborator + '</div>' +
+        '<div class="partner-role">' + (typeLabel[n.type] || n.type) + ' · ' + n.name + (n.royalty ? ' · Royalty tracked' : '') + '</div>' +
+        '</div>';
+    }
   });
-
-  document.getElementById('partner-list').innerHTML =
-    html || '<p style="font-size:0.82rem;color:var(--muted);">No active partners yet.</p>';
+  document.getElementById('partner-list').innerHTML = html || '<p style="font-size:0.82rem;color:var(--muted);">No active partners yet.</p>';
 }
 
 // ============================================================
