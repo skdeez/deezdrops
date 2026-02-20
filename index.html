@@ -98,6 +98,13 @@ nav.scrolled { background: var(--bark); box-shadow: 0 2px 20px rgba(0,0,0,0.4); 
 .node-lesson { font-family: 'Playfair Display', serif; font-style: italic; font-size: 0.8rem; color: var(--muted); border-left: 2px solid var(--gold); padding-left: 0.8rem; line-height: 1.5; margin-bottom: 0.85rem; }
 .node-royalty { font-size: 0.72rem; color: var(--muted); background: var(--parchment); border: 1px dashed var(--border); border-radius: 6px; padding: 0.5rem 0.8rem; line-height: 1.55; }
 .node-royalty strong { color: var(--bark); font-weight: 500; }
+.node-image { width: 100%; max-width: 480px; border-radius: 8px; margin-top: 1rem; margin-bottom: 1rem; display: block; object-fit: cover; border: 1px solid var(--border); }
+.node-variants { margin-top: 1rem; margin-bottom: 0.85rem; }
+.node-variants-label { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.5rem; }
+.variant-row { display: grid; grid-template-columns: auto 1fr; gap: 0.4rem 0.9rem; align-items: baseline; padding: 0.55rem 0; border-top: 1px solid var(--border); }
+.variant-row:last-child { border-bottom: 1px solid var(--border); }
+.variant-id { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--rust); white-space: nowrap; font-weight: 500; }
+.variant-detail { font-size: 0.82rem; color: #3d2e1e; line-height: 1.5; }
 .provenance { display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 0.8rem; }
 .prov-chip { font-size: 0.6rem; letter-spacing: 0.07em; font-weight: 500; padding: 0.18em 0.6em; border-radius: 99px; background: var(--parchment); color: var(--muted); border: 1px solid var(--border); }
 .prov-arrow { color: var(--border); font-size: 0.65rem; }
@@ -807,7 +814,8 @@ async function loadFromAirtable() {
     lineageData.sort(function(a, b) {
       var aNum = a.number ? parseInt(a.number, 10) : 999;
       var bNum = b.number ? parseInt(b.number, 10) : 999;
-      return aNum - bNum;
+      if (aNum !== bNum) return aNum - bNum;
+      return a.createdTime < b.createdTime ? -1 : 1;
     });
     rerender();
   } catch(e) {
