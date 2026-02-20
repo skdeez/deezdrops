@@ -105,6 +105,7 @@ nav.scrolled { background: var(--bark); box-shadow: 0 2px 20px rgba(0,0,0,0.4); 
 .variant-row:last-child { border-bottom: 1px solid var(--border); }
 .variant-id { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--rust); white-space: nowrap; font-weight: 500; }
 .variant-detail { font-size: 0.82rem; color: #3d2e1e; line-height: 1.5; }
+.node-released { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 0.85rem; }
 .provenance { display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 0.8rem; }
 .prov-chip { font-size: 0.6rem; letter-spacing: 0.07em; font-weight: 500; padding: 0.18em 0.6em; border-radius: 99px; background: var(--parchment); color: var(--muted); border: 1px solid var(--border); }
 .prov-arrow { color: var(--border); font-size: 0.65rem; }
@@ -434,6 +435,7 @@ function makeNode(node, ancestors) {
     '<div class="node-name">' + node.name + '</div>' +
     (node.collaborator ? '<div class="node-collab">' + node.collaborator + '</div>' : '') +
     '<div class="node-desc">' + node.desc + '</div>' +
+    (node.released ? '<div class="node-released">Released: ' + node.released + '</div>' : '') +
     (node.image ? '<img class="node-image" src="' + node.image + '" alt="' + node.name + ' — Season Deez product photo" loading="lazy">' : '') +
     (node.variants ? (function(v) {
       var lines = v.split('\n').map(function(l){ return l.trim(); }).filter(Boolean);
@@ -821,7 +823,8 @@ async function loadFromAirtable() {
         royalty:      f.Royalty || null,
         parentId:     f.ParentId || null,
         image:        (f.Image && f.Image[0] && f.Image[0].url) ? f.Image[0].url : null,
-        variants:     f.Variants || null
+        variants:     f.Variants || null,
+        released:     f.Released || null,
       });
     });
     // Sort by number so 001, 002, 003 always appear in order
