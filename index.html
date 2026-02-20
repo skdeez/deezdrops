@@ -434,6 +434,17 @@ function makeNode(node, ancestors) {
     '<div class="node-name">' + node.name + '</div>' +
     (node.collaborator ? '<div class="node-collab">' + node.collaborator + '</div>' : '') +
     '<div class="node-desc">' + node.desc + '</div>' +
+    (node.image ? '<img class="node-image" src="' + node.image + '" alt="' + node.name + ' — Season Deez product photo" loading="lazy">' : '') +
+    (node.variants ? (function(v) {
+      var lines = v.split('\n').map(function(l){ return l.trim(); }).filter(Boolean);
+      var rows = lines.map(function(line) {
+        var parts = line.split('|').map(function(p){ return p.trim(); });
+        var id = parts[0] || '';
+        var detail = parts.slice(1).join(' · ');
+        return '<div class="variant-row"><span class="variant-id">' + id + '</span><span class="variant-detail">' + detail + '</span></div>';
+      }).join('');
+      return '<div class="node-variants"><div class="node-variants-label">Packaging &amp; Variant History</div>' + rows + '</div>';
+    })(node.variants) : '') +
     (node.lesson ? '<div class="node-lesson">' + node.lesson + '</div>' : '') +
     (node.royalty ? '<div class="node-royalty"><strong>Partnership:</strong> ' + node.royalty + '</div>' : '');
 
@@ -799,6 +810,7 @@ async function loadFromAirtable() {
 
       lineageData.push({
         id:           nodeId,
+        createdTime:  row.createdTime || '',
         number:       f.Number || null,
         type:         f.Type || 'derivative',
         name:         f.Name || '',
@@ -807,7 +819,9 @@ async function loadFromAirtable() {
         desc:         f.Description || '',
         lesson:       f.Lesson || '',
         royalty:      f.Royalty || null,
-        parentId:     f.ParentId || null
+        parentId:     f.ParentId || null,
+        image:        (f.Image && f.Image[0] && f.Image[0].url) ? f.Image[0].url : null,
+        variants:     f.Variants || null
       });
     });
     // Sort by number so 001, 002, 003 always appear in order
